@@ -28,6 +28,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String registerPage(Model model) {
+        model.addAttribute("title", "Avanti Store - Register");
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
@@ -38,11 +39,13 @@ public class AuthController {
         model.addAttribute("message", "Successfully registered a user and logged in");
         session.setAttribute("loggedInUser", user);
         session.setAttribute("role", user.getRole());
+        System.out.println("com.avanti.ecommerce.controller.AuthController.registerUser()" + user.getRole() + user.getRole() == "ADMIN");
         return "redirect:/";
     }
 
     @GetMapping("/login")
     public String loginPage(Model model) {
+        model.addAttribute("title", "Avanti Store - Login");
         model.addAttribute("loginRequest", new LoginRequest());
         return "login";
 
@@ -53,7 +56,7 @@ public class AuthController {
         UserDto user = this.authService.login(loginRequest);
         model.addAttribute("message", "Successfully logged in a user");
         session.setAttribute("loggedInUser", user);
-        session.setAttribute("role", user.getRole());
+        session.setAttribute("role", user.getRole().name());
         return "redirect:/";
     }
 

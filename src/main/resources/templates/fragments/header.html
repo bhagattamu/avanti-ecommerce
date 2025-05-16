@@ -11,13 +11,58 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     </head>
     <body>
         <header th:fragment="header">
-            
-            <form th:action="@{/logout}" method="post">
-                    <button  type="submit" data-mdb-button-init data-mdb-ripple-init>Logout</button>
-        
-        </header>
-        
+            <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Avanti</a>
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            </li>
+                            <th:block th:if="${#ctx.session.role == 'ADMIN'}">
+                                <li class="nav-item">
+                                <a class="nav-link" href="/admin/category">Manage Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/product">Manage Products</a>
+                            </li>
+                            </th:block>
+                            
+                        </ul>
+                        <th:block th:if="${#ctx.session.loggedInUser != null}">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-circle fs-5 me-1"></i> <!-- Bootstrap Icons -->
+                                        <span th:text="${#ctx.session.loggedInUser.firstName}">Username</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form th:action="@{/logout}" method="post" class="px-3">
+                                                <button class="btn btn-link dropdown-item" type="submit">Logout</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </th:block>
+                        <th:block th:if="${#ctx.session.loggedInUser == null}">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/login">Login</a>
+                                </li>
 
-        </form>
+                            </ul>
+                        </th:block>
+
+                    </div>
+                </div>
+            </nav>
+        </header>
     </body>
 </html>

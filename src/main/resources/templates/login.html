@@ -4,18 +4,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
 <html xmlns:th="http://thymeleaf.org">
-    <head>
-        <title>Login</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+    <div th:replace="~{fragments/head :: commonHead(${title})}"></div>
     <body>
+        <div th:replace="~{fragments/header :: header}"></div>
         <div class="container">
             <h1>Login</h1>
             <div class="card">
                 <div class="card-body">
                     <form method="post" th:action="@{/loginUser}"th:object="${loginRequest}">
-                        
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" class="form-control" name="email" th:field="*{email}" id="email" aria-describedby="emailHelp">
@@ -27,13 +24,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </div>
                         <button type="submit" class="btn btn-primary">Log In</button>
                     </form>
-                   
+
                     <div class="d-flex align-items-center justify-content-center pb-4">
-                        <p class="mb-0 me-2">Already have an account?</p>
-                        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger" onclick="redirectToLogin()">Login</button>
+                        <p class="mb-0 me-2">Don't have an account?</p>
+                        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger" onclick="redirectToRegister()">Register</button>
                     </div>
                 </div>
             </div>
         </div>
     </body>
+    <script>
+        function redirectToRegister() {
+            location.href = "/register";
+        }
+    </script>
 </html>

@@ -1,0 +1,31 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.avanti.ecommerce.dto;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
+
+/**
+ *
+ * @author ACER
+ */
+@Data
+public class AddProductRequest {
+    @NotEmpty(message = "Category id should not be empty")
+    private Long categoryId;
+    
+    @NotEmpty(message = "Name can not be empty")
+    private String name;
+    
+    @NotEmpty(message = "Description can not be empty")
+    private String description;
+    
+    @NotEmpty(message = "Stock in hand should not be empty")
+    @Min(value = 1, message = "Stock in hand should not be 0 when adding a product")
+    private Integer stockInHand;
+    
+    
+}

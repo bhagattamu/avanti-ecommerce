@@ -4,7 +4,6 @@
  */
 package com.avanti.ecommerce.service;
 
-
 import com.avanti.ecommerce.dto.RegisterRequest;
 import com.avanti.ecommerce.dto.UpdateUserRequest;
 import com.avanti.ecommerce.dto.UserDto;
@@ -34,7 +33,10 @@ public class UserServiceImplementation implements UserService {
         userData.setFirstName(user.getFirstName().trim());
         userData.setLastName(user.getLastName().trim());
         userData.setEmail(user.getEmail().trim());
-        userData.setPhoneNo(user.getPhoneNo().trim());
+        if (user.getPhoneNo() != null) {
+            userData.setPhoneNo(user.getPhoneNo().trim());
+        }
+
         String hashedPassword = passwordEncoder.encode(user.getPassword().trim());
         userData.setPassword(hashedPassword);
         UserDto savedUser = toUserDto(userRepository.save(userData));

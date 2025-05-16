@@ -4,16 +4,16 @@
  */
 package com.avanti.ecommerce.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 /**
@@ -21,21 +21,27 @@ import lombok.Data;
  * @author ACER
  */
 @Entity
-@Table(name = "category")
+@Table(name = "product", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"cat_id", "name"})})
 @Data
-public class Category {
+public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    
-    @Column(name = "name", nullable = false, unique = true)
+
+    @ManyToOne
+    @JoinColumn(name = "cat_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_product_category"))
+    private Category category;
+
+    @Column(name = "name", nullable = false)
     private String name;
-    
-    @Column(name = "description", nullable = false)
+
+    @Column(name = "description")
     private String description;
-    
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
-    
+
+    @Column(name = "stock_in_hand")
+    private int stockInHand;
 }

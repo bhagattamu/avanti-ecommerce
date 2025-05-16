@@ -56,6 +56,11 @@ public class CategoryServiceImplementation implements CategoryService{
     }
     
     @Override
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
+    }
+    
+    @Override
     public CategoryDto toCategoryDto(Category cat) {
         CategoryDto category = new CategoryDto();
         category.setId(cat.getId());

@@ -20,4 +20,5 @@ public interface CategoryService {
     public List<CategoryDto> getCategories();
     public CategoryDto updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest);
     public CategoryDto toCategoryDto(Category category);
+    public void deleteCategory(Long id);
 }
