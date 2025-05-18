@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +55,21 @@ public class ProductController {
         model.addAttribute("addProductRequest", new AddProductRequest());
         model.addAttribute("products", productList);
         return "manage-product";
+    }
+    
+    @GetMapping("/product/{id}")
+    public String shopProduct(@PathVariable String id, HttpSession session, Model model) {
+        model.addAttribute("title", "Avanti Store - Shop Product");
+        try {
+            Long productId = Long.valueOf(id);
+            ProductDto product = this.productService.getProductById(productId);
+            model.addAttribute("product", product);
+            return "shop-product";
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            System.out.println("Failed! Please provide correct product id. Message: " + e.getMessage());
+        }        
+        return "redirect:/";
     }
 
     @PostMapping("/admin/product")
