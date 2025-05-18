@@ -1,9 +1,11 @@
-<html>
-    <div th:replace="~{fragments/head :: commonHead(${title})}"></div>
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}">
     <body>
-        <div th:replace="~{fragments/header :: header}"></div>
-        <div>Dashboard</div>
-        
-        <div th:replace="~{fragments/footer :: footer}"></div>
+        <div layout:fragment="content">
+            <div class="d-flex justify-content-between my-2">
+                <h2>Dashboard</h2>
+            </div>   
+        </div>
     </body>
+
 </html>

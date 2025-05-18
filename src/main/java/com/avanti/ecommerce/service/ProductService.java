@@ -16,8 +16,7 @@ import java.util.List;
 public interface ProductService {
 
     public ProductDto addProduct(AddProductRequest addProductRequest);
-
-    public ProductDto toProductDto(Product product);
-//    public CategoryDto getCategoryById(Long id);
     public List<ProductDto> getProducts();
+    public ProductDto getProductById(Long id);    
+    public ProductDto toProductDto(Product product);
 }

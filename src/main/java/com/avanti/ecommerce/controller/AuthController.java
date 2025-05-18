@@ -38,7 +38,7 @@ public class AuthController {
         UserDto user = this.authService.register(registerRequest);
         model.addAttribute("message", "Successfully registered a user and logged in");
         session.setAttribute("loggedInUser", user);
-        session.setAttribute("role", user.getRole());
+        session.setAttribute("role", user.getRole().name());
         System.out.println("com.avanti.ecommerce.controller.AuthController.registerUser()" + user.getRole() + user.getRole() == "ADMIN");
         return "redirect:/";
     }

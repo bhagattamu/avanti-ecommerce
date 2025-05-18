@@ -7,6 +7,7 @@ package com.avanti.ecommerce.service;
 import com.avanti.ecommerce.dto.AddProductRequest;
 import com.avanti.ecommerce.dto.ProductDto;
 import com.avanti.ecommerce.exception.CategoryNotFoundException;
+import com.avanti.ecommerce.exception.ProductNotFoundException;
 import com.avanti.ecommerce.model.Category;
 import com.avanti.ecommerce.model.Product;
 import com.avanti.ecommerce.repository.CategoryRepository;
@@ -39,6 +40,8 @@ public class ProductServiceImplementation implements ProductService{
         System.out.println("com.avanti.ecommerce.service.ProductServiceImplementation.addProduct()" + addProductRequest.getStockInHand());
         newProduct.setName(addProductRequest.getName());
         newProduct.setDescription(addProductRequest.getDescription());
+        newProduct.setPrice(addProductRequest.getPrice());
+        newProduct.setProductImage(addProductRequest.getProductImage());
         newProduct.setStockInHand(addProductRequest.getStockInHand());
         return toProductDto(productRepository.save(newProduct));  
     }
@@ -56,9 +59,17 @@ public class ProductServiceImplementation implements ProductService{
         productData.setId(product.getId());
         productData.setName(product.getName());
         productData.setDescription(product.getDescription());
+        productData.setPrice(product.getPrice());
+        productData.setProductImage(product.getProductImage());
         productData.setStockInHand(product.getStockInHand());
         productData.setCategory(categoryService.toCategoryDto(product.getCategory()));
         return productData;
+    }
+
+    @Override
+    public ProductDto getProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+        return toProductDto(product);
     }
 
     

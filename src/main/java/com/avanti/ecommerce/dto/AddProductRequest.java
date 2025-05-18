@@ -23,9 +23,15 @@ public class AddProductRequest {
     @NotEmpty(message = "Description can not be empty")
     private String description;
     
+    @NotEmpty(message = "Price should not be empty")
+    @Min(value = 0L, message = "Price should be positive")
+    private Double price;
+    
     @NotEmpty(message = "Stock in hand should not be empty")
     @Min(value = 1, message = "Stock in hand should not be 0 when adding a product")
     private Integer stockInHand;
+    
+    private String productImage;
     
     
 }

@@ -11,9 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 /**
@@ -21,7 +25,7 @@ import lombok.Data;
  * @author ACER
  */
 @Entity
-@Table(name = "product", uniqueConstraints = {
+@Table(name = "products", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"cat_id", "name"})})
 @Data
 public class Product {
@@ -41,6 +45,13 @@ public class Product {
 
     @Column(name = "description")
     private String description;
+       
+    @Column(name = "product_image")
+    private String productImage;
+    
+    @NotEmpty(message = "Price should not be empty")
+    @Min(value = 0L, message = "Price should be positive")
+    private Double price;
 
     @Column(name = "stock_in_hand")
     private int stockInHand;

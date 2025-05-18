@@ -21,7 +21,7 @@ import lombok.Data;
  * @author ACER
  */
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 @Data
 public class Category {
     @Id

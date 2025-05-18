@@ -16,5 +16,15 @@ public class ProductDto {
     private CategoryDto category;
     private String name;
     private String description;
+    private Double price;
+    private String productImage;
+    private String productImagePath;
     private int stockInHand;
+    
+    public String getProductImagePath() {
+        if(id == null || productImage == null) {
+            return "~/images/product-default.jpg";
+        }
+        return "~/product-images/" + this.id + "/" + this.productImage;
+    }
 }

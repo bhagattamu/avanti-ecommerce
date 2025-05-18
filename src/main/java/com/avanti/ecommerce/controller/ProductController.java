@@ -10,14 +10,18 @@ import com.avanti.ecommerce.dto.ProductDto;
 import com.avanti.ecommerce.enums.Role;
 import com.avanti.ecommerce.service.CategoryService;
 import com.avanti.ecommerce.service.ProductService;
+import com.avanti.ecommerce.util.FileUploadUtil;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Controller
 public class ProductController {
+
     @Autowired
     private ProductService productService;
     @Autowired
@@ -52,14 +57,34 @@ public class ProductController {
     }
 
     @PostMapping("/admin/product")
-    public String addProduct(@ModelAttribute AddProductRequest addProductRequest, Model model, HttpSession session) {
+    public String addProduct(@ModelAttribute AddProductRequest addProductRequest, @RequestParam("product") MultipartFile productImage, Model model, HttpSession session) {
         if (!isAdmin((String) session.getAttribute("role"))) {
             model.addAttribute("message", "Forbiden! Admin login is requred");
             System.out.println("Forbiden! Admin login is required");
             return "redirect:/";
         }
-        this.productService.addProduct(addProductRequest);
+        try {
+            if(!productImage.isEmpty()) {
+                System.out.println("IN 1");
+                String fileName = StringUtils.cleanPath(productImage.getOriginalFilename());
+                System.out.println("IN 2");
+                addProductRequest.setProductImage(fileName);
+                System.out.println("IN 3");
+                ProductDto savedProduct = this.productService.addProduct(addProductRequest);
+                System.out.println("IN 4");
+                String uploadDir = "product-images/" + savedProduct.getId();
+                System.out.println("IN 5");
+                FileUploadUtil.saveFile(uploadDir, fileName, productImage);
+                System.out.println("IN 6");
+            }
+            System.out.println("Successfully saved a product");
+            model.addAttribute("message", "Successfully saved a product");
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            System.out.println("Failed to create a product. Message: " + e.getMessage());
+        }
         return "redirect:/admin/product";
+
     }
 
 //    @PutMapping("/admin/category")
