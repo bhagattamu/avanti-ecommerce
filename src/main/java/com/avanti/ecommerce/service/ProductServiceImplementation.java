@@ -6,6 +6,7 @@ package com.avanti.ecommerce.service;
 
 import com.avanti.ecommerce.dto.AddProductRequest;
 import com.avanti.ecommerce.dto.ProductDto;
+import com.avanti.ecommerce.dto.UpdateProductRequest;
 import com.avanti.ecommerce.exception.CategoryNotFoundException;
 import com.avanti.ecommerce.exception.ProductNotFoundException;
 import com.avanti.ecommerce.model.Category;
@@ -70,6 +71,26 @@ public class ProductServiceImplementation implements ProductService{
     public ProductDto getProductById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
         return toProductDto(product);
+    }
+
+    @Override
+    public ProductDto updateProduct(UpdateProductRequest updateProductRequest) {
+        Long id = updateProductRequest.getId();
+        Product productFromDB = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+        productFromDB.setName(updateProductRequest.getName());
+        productFromDB.setDescription(updateProductRequest.getDescription());
+        Category catFromDB = categoryRepository.findById(updateProductRequest.getCategoryId()).orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+        productFromDB.setCategory(catFromDB);
+        productFromDB.setPrice(updateProductRequest.getPrice());
+        productFromDB.setStockInHand(updateProductRequest.getStockInHand());
+        productFromDB.setProductImage(updateProductRequest.getProductImage());
+        Product updatedProduct = productRepository.save(productFromDB);
+        return toProductDto(updatedProduct);                
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 
     

@@ -6,6 +6,7 @@ package com.avanti.ecommerce.service;
 
 import com.avanti.ecommerce.dto.AddProductRequest;
 import com.avanti.ecommerce.dto.ProductDto;
+import com.avanti.ecommerce.dto.UpdateProductRequest;
 import com.avanti.ecommerce.model.Product;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public interface ProductService {
 
     public ProductDto addProduct(AddProductRequest addProductRequest);
     public List<ProductDto> getProducts();
-    public ProductDto getProductById(Long id);    
+    public ProductDto getProductById(Long id);   
+    public ProductDto updateProduct(UpdateProductRequest updateProductRequest);
+    public void deleteProduct(Long id);
     public ProductDto toProductDto(Product product);
 }

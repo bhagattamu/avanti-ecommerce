@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}">
+    <body>
+        <div layout:fragment="content"> 
+            <style>
+                .product-img {
+                    width: 80px;
+                    height: auto;
+                }
+                .qty-box {
+                    width: 100px;
+                }
+                .price-original {
+                    text-decoration: line-through;
+                    color: gray;
+                    font-size: 0.9em;
+                }
+                .total-box {
+                    background-color: #f8f9fa;
+                    padding: 20px;
+                    border-radius: 8px;
+                }
+                .product-card {
+                    border-bottom: 1px solid #ddd;
+                    padding-bottom: 15px;
+                    margin-bottom: 15px;
+                }
+            </style>
+            <div class="container my-5">
+                <h3 class="mb-4">Shopping Cart</h3>
+                <form method="post">
+                    <!-- Cart Items -->
+                    <div class="row">
+                        <div class="col-lg-8" id="items-container">
+                            <!-- Items added from Javascript -->
+                        </div>
+                        <!-- Summary Box -->
+                        <div class="col-lg-4">
+                            <div class="total-box">
+                                <h5>Item subtotal</h5>
+                                <p class="mb-2">$119.85</p>
+                                <h6>Delivery</h6>
+                                <p class="mb-2">FREE</p>
+                                
+                                <hr>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <strong>Total (Incl. GST)</strong>
+                                    <strong>$119.85</strong>
+                                </div>
+                                <button class="btn btn-primary w-100">Order</button>
+                            </div>
+                        </div>
+
+                </form>
+
+            </div>
+        </div>
+        <script>
+            const itemsContainer = document.getElementById("items-container");
+            const cartItems = getCartData();
+            const cartItemsHTMLContent = cartItems.reduce((acc, item) => {
+                const itemTemplate = createCartTemplate(item);
+                return acc + itemTemplate;
+            }, '');
+            itemsContainer.innerHTML = cartItemsHTMLContent;
+
+            console.log(cartItems);
+            function createCartTemplate(product) {
+                const {id, name, productImagePath, stockInHand, quantity, price} = product;
+                const totalPrice = price * quantity;
+                let cartItemTemplate = `
+                <div class="d-flex product-card">
+                    <img src="${productImagePath}" alt="${name}" class="product-img me-3">
+                    <div class="flex-grow-1">
+                        <h6>${name}</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <input class="form-control text-center me-3" id="inputQuantity" min="1" max="${stockInHand}" onchange="onChangeCart()" type="number" value="${quantity}" style="max-width: 5rem" />                        
+                        </div>
+                        <button class="me-3 text-danger" onclick="removeItem(${id})">Remove</button>
+                    </div>
+                    <div class="text-end">
+                        <div>$${totalPrice}</div>
+                    </div>
+                </div>
+            `;
+                return cartItemTemplate;
+            }
+
+        </script>
+    </div>
+
+</body>
+</html>

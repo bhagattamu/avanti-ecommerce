@@ -23,8 +23,8 @@ public class ProductDto {
     
     public String getProductImagePath() {
         if(id == null || productImage == null) {
-            return "~/images/product-default.jpg";
+            return "/images/product-default.jpg";
         }
-        return "~/product-images/" + this.id + "/" + this.productImage;
+        return "/product-images/" + this.id + "/" + this.productImage;
     }
 }

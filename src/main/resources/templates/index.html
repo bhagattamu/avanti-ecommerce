@@ -32,7 +32,7 @@
 
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                    <div class="text-center"><button type="button" class="btn btn-outline-dark mt-auto" th:onclick="addToCart({id: [[${product.id}]], name: [[${product.name}]], price: [[${product.price}]],stockInHand: [[${product.stockInHand}]], quantity: 1, productImagePath: [[${product.productImagePath}]]})" >Add to cart</button></div>
                                 </div>
                             </div>
                         </div>                        

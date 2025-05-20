@@ -6,7 +6,9 @@ package com.avanti.ecommerce.controller;
 
 import com.avanti.ecommerce.dto.AddProductRequest;
 import com.avanti.ecommerce.dto.CategoryDto;
+import com.avanti.ecommerce.dto.DeleteProductDto;
 import com.avanti.ecommerce.dto.ProductDto;
+import com.avanti.ecommerce.dto.UpdateProductRequest;
 import com.avanti.ecommerce.enums.Role;
 import com.avanti.ecommerce.service.CategoryService;
 import com.avanti.ecommerce.service.ProductService;
@@ -17,10 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,10 +57,11 @@ public class ProductController {
         model.addAttribute("categories", catList);
         List<ProductDto> productList = this.productService.getProducts();
         model.addAttribute("addProductRequest", new AddProductRequest());
+        model.addAttribute("updateProductRequest", new UpdateProductRequest());
         model.addAttribute("products", productList);
         return "manage-product";
     }
-    
+
     @GetMapping("/product/{id}")
     public String shopProduct(@PathVariable String id, HttpSession session, Model model) {
         model.addAttribute("title", "Avanti Store - Shop Product");
@@ -68,7 +73,7 @@ public class ProductController {
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             System.out.println("Failed! Please provide correct product id. Message: " + e.getMessage());
-        }        
+        }
         return "redirect:/";
     }
 
@@ -80,18 +85,14 @@ public class ProductController {
             return "redirect:/";
         }
         try {
-            if(!productImage.isEmpty()) {
-                System.out.println("IN 1");
+            if (!productImage.isEmpty()) {
                 String fileName = StringUtils.cleanPath(productImage.getOriginalFilename());
-                System.out.println("IN 2");
                 addProductRequest.setProductImage(fileName);
-                System.out.println("IN 3");
                 ProductDto savedProduct = this.productService.addProduct(addProductRequest);
-                System.out.println("IN 4");
                 String uploadDir = "product-images/" + savedProduct.getId();
-                System.out.println("IN 5");
                 FileUploadUtil.saveFile(uploadDir, fileName, productImage);
-                System.out.println("IN 6");
+            } else {
+                this.productService.addProduct(addProductRequest);
             }
             System.out.println("Successfully saved a product");
             model.addAttribute("message", "Successfully saved a product");
@@ -103,38 +104,49 @@ public class ProductController {
 
     }
 
-//    @PutMapping("/admin/category")
-//    public String addCategory(@PathVariable String id, @ModelAttribute UpdateCategoryRequest updateCategoryRequest, Model model, HttpSession session) {
-//        if (!isAdmin((Role) session.getAttribute("role"))) {
-//            model.addAttribute("message", "Forbiden! Admin login is requred");
-//            System.out.println("Forbiden! Admin login is required");
-//            return "redirect:/";
-//        }
-//        try {
-//            Long catId = Long.valueOf(id);
-//            this.categoryService.updateCategory(catId, updateCategoryRequest);
-//        } catch (Exception e) {
-//            model.addAttribute("message", e.getMessage());
-//            System.out.println("Failed! Please provide correct category id. Message: " + e.getMessage());
-//        }
-//        return "redirect:/admin/category";
-//
-//    }
-//
-//    @DeleteMapping("/admin/category")
-//    public String deleteCategory(@PathVariable String id, Model model, HttpSession session) {
-//        if (!isAdmin((Role) session.getAttribute("role"))) {
-//            model.addAttribute("message", "Forbiden! Admin login is requred");
-//            System.out.println("Forbiden! Admin login is required");
-//            return "redirect:/";
-//        }
-//        try {
-//            Long catId = Long.valueOf(id);
-//            this.categoryService.deleteCategory(catId);
-//        } catch (Exception e) {
-//            model.addAttribute("message", e.getMessage());
-//            System.out.println("Failed! Delete fail. Message: " + e.getMessage());
-//        }
-//        return "redirect:/admin/category";
-//    }
+    @PostMapping("/admin/product/update")
+    public String updateProduct(@RequestParam("product") MultipartFile productImage, @ModelAttribute UpdateProductRequest updateProductRequest, Model model, HttpSession session) {
+        if (!isAdmin((String) session.getAttribute("role"))) {
+            model.addAttribute("message", "Forbiden! Admin login is requred");
+            System.out.println("Forbiden! Admin login is required");
+            return "redirect:/login";
+        }
+        System.out.println("com.avanti.ecommerce.controller.ProductController.updateProduct(), PUT MAPPING");
+        try {
+            if (!productImage.isEmpty()) {
+                String fileName = StringUtils.cleanPath(productImage.getOriginalFilename());
+                updateProductRequest.setProductImage(fileName);
+                ProductDto savedProduct = this.productService.updateProduct(updateProductRequest);
+                String uploadDir = "product-images/" + savedProduct.getId();
+                FileUploadUtil.saveFile(uploadDir, fileName, productImage);
+            } else {
+                this.productService.updateProduct(updateProductRequest);
+            }
+            System.out.println("Successfully saved a product");
+            model.addAttribute("message", "Successfully saved a product");
+
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            System.out.println("Failed to create a product. Message: " + e.getMessage());
+        }
+        return "redirect:/admin/product";
+
+    }
+
+    @DeleteMapping("/admin/product")
+    public void deleteProduct(@RequestBody DeleteProductDto deleteProduct, Model model, HttpSession session) {
+        if (!isAdmin((String) session.getAttribute("role"))) {
+            model.addAttribute("message", "Forbiden! Admin login is requred");
+            System.out.println("Forbiden! Admin login is required");
+            return;
+        }
+        System.out.println("com.avanti.ecommerce.controller.ProductController.deleteProduct()");
+        try {
+            Long productId = deleteProduct.getId();
+            this.productService.deleteProduct(productId);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            System.out.println("Failed! Delete fail. Message: " + e.getMessage());
+        }
+    }
 }

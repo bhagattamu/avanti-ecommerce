@@ -49,4 +49,10 @@ public class HomeController {
         model.addAttribute("products", productList);
         return "index";
     }
+    
+    @GetMapping("/cart")
+    public String cart(HttpSession session, Model model) {
+        model.addAttribute("title", "Avanti Store - Cart");       
+        return "cart";
+    }
 }

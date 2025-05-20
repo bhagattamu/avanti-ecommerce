@@ -20,6 +20,7 @@ import com.avanti.ecommerce.repository.OrderItemRepository;
 import com.avanti.ecommerce.repository.OrderRepository;
 import com.avanti.ecommerce.repository.ProductRepository;
 import com.avanti.ecommerce.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +52,7 @@ public class OrderServiceImplementation implements OrderService{
     private ProductService productService;
     
     @Override
+    @Transactional
     public OrderDto createOrder(AddOrderRequest addOrderRequest) {
         Order order = new Order();
         User user = userRepository.findById(addOrderRequest.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found with id: " + addOrderRequest.getUserId()));

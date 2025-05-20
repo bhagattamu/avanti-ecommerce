@@ -24,14 +24,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             </li>
                             <th:block th:if="${#ctx.session.role == 'ADMIN'}">
                                 <li class="nav-item">
-                                <a class="nav-link" href="/admin/category">Manage Categories</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin/product">Manage Products</a>
-                            </li>
+                                    <a class="nav-link" href="/admin/category">Manage Categories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin/product">Manage Products</a>
+                                </li>
                             </th:block>
-                            
+
                         </ul>
+
                         <th:block th:if="${#ctx.session.loggedInUser != null}">
                             <ul class="navbar-nav">
                                 <li class="nav-item dropdown">
@@ -59,10 +60,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                             </ul>
                         </th:block>
-
+                        <form method="get" th:action="@{/cart}" class="d-flex">
+                            <button class="btn btn-outline-dark" type="submit">
+                                <i class="bi-cart-fill me-1"></i>
+                                Cart
+                                <span class="badge bg-dark text-white ms-1 rounded-pill" id="noOfItemInCartSpan">0</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </nav>
+            <script>
+                // For cart in header
+                const noOfItemInCartSpan = document.getElementById("noOfItemInCartSpan");
+                noOfItemInCartSpan.textContent = getNoOfDataInCart();
+            </script>
         </header>
+
+
     </body>
 </html>

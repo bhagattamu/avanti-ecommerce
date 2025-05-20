@@ -67,7 +67,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="edit-product-form" method="post" th:action="@{/admin/product}" th:object="${addProductRequest}" enctype="multipart/form-data">                                                        
+                            <form id="edit-product-form" method="post" th:action="@{/admin/product/update}" th:object="${updateProductRequest}" enctype="multipart/form-data">                                                        
                                 <input type="text" class="form-control"  name="id" hidden>
                                 <div class="form-group">
                                     <label for="category" >Select Category</label>
@@ -154,7 +154,8 @@
                             body: JSON.stringify({id})
                         }).then(() =>
                         {
-                            location.href = "/admin/product";
+                            console.log("Successfully deleted");
+                            location.reload();
                         });
                     }
                 }
