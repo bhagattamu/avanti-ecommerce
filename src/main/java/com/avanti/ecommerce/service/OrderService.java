@@ -5,8 +5,11 @@
 package com.avanti.ecommerce.service;
 
 import com.avanti.ecommerce.dto.AddOrderRequest;
+import com.avanti.ecommerce.dto.ChangeOrderStatusDto;
 import com.avanti.ecommerce.dto.OrderDto;
+import com.avanti.ecommerce.enums.OrderStatus;
 import com.avanti.ecommerce.model.Order;
+import java.util.List;
 import org.springframework.data.domain.jaxb.SpringDataJaxb;
 
 /**
@@ -14,6 +17,10 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb;
  * @author ACER
  */
 public interface OrderService {
-    public OrderDto createOrder(AddOrderRequest createOrderRequest);
+    public OrderDto createOrder(Long userId, AddOrderRequest createOrderRequest);
+    public List<OrderDto> getOrders();
+    public List<OrderDto> getUserOrders(Long userId);
+    public void deleteOrder(Long orderId);
+    public void changeOrderStatus(ChangeOrderStatusDto changeOrderStatusDto);
     public OrderDto toOrderDto(Order order);
 }

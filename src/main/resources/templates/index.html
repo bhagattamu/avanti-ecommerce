@@ -26,7 +26,8 @@
                                         <!-- Product name-->
                                         <h5 class="fw-bolder" th:text="${product.name}">P</h5>
                                         <!-- Product price-->
-                                        <span th:text="'$' + ${product.price}">$40.00 - $80.00</span>
+                                        <span th:text="'$' + ${product.price}">$40.00 - $80.00</span><br>
+                                        <i th:text=" 'Total Stock: ' + ${product.stockInHand}"></i>
                                     </div>
                                 </div>
 

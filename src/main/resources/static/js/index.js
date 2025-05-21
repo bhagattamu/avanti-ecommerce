@@ -21,12 +21,14 @@ function addToCart(product) {
                 }
                 return item;
             });
+            localStorage.setItem(storageKey, JSON.stringify(data));
+        } else {
+            const newData = [...data, product];
+            localStorage.setItem(storageKey, JSON.stringify(newData));
         }
         if (stockOut) {
             return;
         }
-        const newData = [...data, product];
-        localStorage.setItem(storageKey, JSON.stringify(newData));
     } else {
         localStorage.setItem(storageKey, JSON.stringify([product]));
     }
@@ -34,7 +36,9 @@ function addToCart(product) {
 
 }
 
-function onChangeCart() {
+function onChangeCart(product, event) {
+    console.log({product, val: event.value});
+//    const productId = document.getElementById("")
 //    console.log(product);
 //    if (product.quantity > product.stockInHand) {
 //        alert(`We don't have enough stock for item: ${product.name}, total stock: ${product.stockInHand}`);
@@ -66,7 +70,7 @@ function removeItem(id) {
     const rawData = localStorage.getItem(storageKey);
     if (rawData) {
         const data = JSON.parse(rawData);
-        localStorage.setItem(storageKey, JSON.stringify(data.filter(item => item.id !== id)));
+        localStorage.setItem(storageKey, JSON.stringify(data.filter(item => item.id != id)));
     }
     location.reload();
 }

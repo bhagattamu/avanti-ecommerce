@@ -4,9 +4,6 @@
  */
 package com.avanti.ecommerce.dto;
 
-import com.avanti.ecommerce.enums.OrderStatus;
-import java.util.Date;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -14,14 +11,6 @@ import lombok.Data;
  * @author ACER
  */
 @Data
-public class OrderDto {
+public class DeleteOrderDto {
     private Long id;
-    private UserDto user;
-    private List<OrderItemDto> orderItems;
-    private Date orderDate;
-    private OrderStatus orderStatus;
-    private Double totalPrice;
 }
-
-
-

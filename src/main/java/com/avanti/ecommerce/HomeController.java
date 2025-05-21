@@ -4,6 +4,7 @@
  */
 package com.avanti.ecommerce;
 
+import com.avanti.ecommerce.dto.AddOrderRequest;
 import com.avanti.ecommerce.dto.AddProductRequest;
 import com.avanti.ecommerce.dto.CategoryDto;
 import com.avanti.ecommerce.dto.ProductDto;
@@ -52,7 +53,9 @@ public class HomeController {
     
     @GetMapping("/cart")
     public String cart(HttpSession session, Model model) {
-        model.addAttribute("title", "Avanti Store - Cart");       
+        model.addAttribute("title", "Avanti Store - Cart");   
+        // Add attribute for form
+        model.addAttribute("addOrderRequest", new AddOrderRequest());
         return "cart";
     }
 }

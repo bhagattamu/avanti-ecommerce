@@ -22,12 +22,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="/">Home</a>
                             </li>
+                            <th:block th:if="${#ctx.session.loggedInUser != null}">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="/orders">My Orders</a>
+                                </li>
+                            </th:block>
                             <th:block th:if="${#ctx.session.role == 'ADMIN'}">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/category">Manage Categories</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/product">Manage Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin/order">Manage Orders</a>
                                 </li>
                             </th:block>
 

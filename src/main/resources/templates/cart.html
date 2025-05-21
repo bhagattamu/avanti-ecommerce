@@ -28,7 +28,7 @@
             </style>
             <div class="container my-5">
                 <h3 class="mb-4">Shopping Cart</h3>
-                <form method="post">
+                <form method="post" id="cart-form" th:action="@{/order}"th:object="${addOrderRequest}">
                     <!-- Cart Items -->
                     <div class="row">
                         <div class="col-lg-8" id="items-container">
@@ -38,56 +38,86 @@
                         <div class="col-lg-4">
                             <div class="total-box">
                                 <h5>Item subtotal</h5>
-                                <p class="mb-2">$119.85</p>
+                                <p class="mb-2" id="total-price-element">$119.85</p>
                                 <h6>Delivery</h6>
                                 <p class="mb-2">FREE</p>
-                                
+
                                 <hr>
                                 <div class="d-flex justify-content-between mb-3">
                                     <strong>Total (Incl. GST)</strong>
-                                    <strong>$119.85</strong>
+                                    <strong id="total-price-with-gst">$119.85</strong>
                                 </div>
-                                <button class="btn btn-primary w-100">Order</button>
+                                <th:block th:if="${#ctx.session.loggedInUser != null}">
+                                    <button type="submit" class="btn btn-primary w-100">Order</button>
+                                </th:block>
+                                <th:block th:if="${#ctx.session.loggedInUser == null}">
+                                    <button type="button" class="btn btn-primary w-100" onclick="(() => location.href='/login?url=cart')()">Login to Order</button>
+                                </th:block>
                             </div>
                         </div>
+                    </div>
 
                 </form>
 
             </div>
-        </div>
-        <script>
-            const itemsContainer = document.getElementById("items-container");
-            const cartItems = getCartData();
-            const cartItemsHTMLContent = cartItems.reduce((acc, item) => {
-                const itemTemplate = createCartTemplate(item);
-                return acc + itemTemplate;
-            }, '');
-            itemsContainer.innerHTML = cartItemsHTMLContent;
+            <script>
+                const itemsContainer = document.getElementById("items-container");
+                let totalPrice = 0;
+                const totalPriceElement = document.getElementById("total-price-element");
+                const totalPriceWithGSTElement = document.getElementById("total-price-with-gst");
+                const cartItems = getCartData();
+                const cartItemsHTMLContent = cartItems.reduce((acc, item, index) => {
+                    const itemTemplate = createCartTemplate(item, index);
+                    totalPrice += item.price * item.quantity;
+                    return acc + itemTemplate;
+                }, '');
+                itemsContainer.innerHTML = cartItemsHTMLContent;
+                totalPriceElement.textContent = totalPrice;
+                totalPriceWithGSTElement.textContent = totalPrice;
 
-            console.log(cartItems);
-            function createCartTemplate(product) {
-                const {id, name, productImagePath, stockInHand, quantity, price} = product;
-                const totalPrice = price * quantity;
-                let cartItemTemplate = `
-                <div class="d-flex product-card">
-                    <img src="${productImagePath}" alt="${name}" class="product-img me-3">
-                    <div class="flex-grow-1">
-                        <h6>${name}</h6>
-                        <div class="d-flex align-items-center mb-2">
-                            <input class="form-control text-center me-3" id="inputQuantity" min="1" max="${stockInHand}" onchange="onChangeCart()" type="number" value="${quantity}" style="max-width: 5rem" />                        
+                cartItems.forEach((item) => {
+                    const productIdElement = document.getElementById(`product-${item.id}`);
+                    console.log({id: item.id});
+                    productIdElement.value = item.id;
+                    productIdElement.dispatchEvent(new Event('input', {bubbles: true}));
+                    const productQuantityElement = document.getElementById(`product-${item.id}-qty`);
+                    productQuantityElement.value = item.quantity;
+                    productQuantityElement.dispatchEvent(new Event('input', {bubbles: true}));
+                    const productPriceElement = document.getElementById(`product-${item.id}-price`);
+                    productPriceElement.value = item.quantity * item.price;
+                    productPriceElement.dispatchEvent(new Event('input', {bubbles: true}));
+                });
+
+                console.log(cartItems);
+                function createCartTemplate(product, index) {
+                    const {id, name, productImagePath, stockInHand, quantity, price} = product;
+                    const totalPrice = price * quantity;
+                    let cartItemTemplate = `
+                    <div class="d-flex product-card" >
+                        <input type="text" id="product-${id}" name="orderItems[${index}].productId" hidden />
+                        <img src="${productImagePath}" alt="${name}" class="product-img me-3">
+                        <div class="flex-grow-1">
+                            <h6>${name}</h6>
+                            <div class="d-flex align-items-center mb-2">
+                                <input class="form-control text-center me-3" name="orderItems[${index}].quantity" id="product-${id}-qty" min="1" max="${stockInHand}" onchange="(e) => onChangeCart(product, e)" type="number"  style="max-width: 5rem" />                        
+                            </div>
+                            <button class="me-3 text-danger" type="button" onclick="removeItem(${id})">Remove</button>
                         </div>
-                        <button class="me-3 text-danger" onclick="removeItem(${id})">Remove</button>
+                        <div class="text-end">
+                            <input type="number" id="product-${id}-price" name="orderItems[${index}].price" hidden  />
+                            <div>$${totalPrice}</div>
+                        </div>
                     </div>
-                    <div class="text-end">
-                        <div>$${totalPrice}</div>
-                    </div>
-                </div>
-            `;
-                return cartItemTemplate;
-            }
+                `;
+                    return cartItemTemplate;
+                }
 
-        </script>
-    </div>
+                const cartForm = document.getElementById("cart-form");
+                cartForm.addEventListener("submit", function (e) {
+                    localStorage.removeItem("CART");
+                });
+            </script>
+        </div>
 
-</body>
+    </body>
 </html>

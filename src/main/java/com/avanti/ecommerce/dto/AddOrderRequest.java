@@ -13,6 +13,6 @@ import lombok.Data;
  */
 @Data
 public class AddOrderRequest {
-    private Long userId;
+//    private Long userId;
     private List<AddOrderItemRequest> orderItems;
 }
