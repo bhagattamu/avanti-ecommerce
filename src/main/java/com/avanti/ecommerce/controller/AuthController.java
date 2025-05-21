@@ -64,8 +64,8 @@ public class AuthController {
     @PostMapping("/logout")
     public String logoutUser(Model model, HttpSession session) {
         System.out.println("com.avanti.ecommerce.controller.AuthController.logoutUser()");
-        model.addAttribute("message", "Successfully logged out a user");
-        session.removeAttribute("loggedInUser");
+        model.addAttribute("message", "Successfully logged out a user");        
+        session.invalidate();
         return "redirect:/login";
     }
 

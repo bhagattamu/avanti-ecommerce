@@ -9,6 +9,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Order ID</th>
+                        <th scope='col'>User</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
                         <th scope="col">Product Name</th>
@@ -25,6 +26,7 @@
                 <th:block th:each="order : ${orderList}">
                     <tr>
                         <td scope="row"><span th:text="${order.id}"></span></td>
+                        <td scope="row"><span th:text="${order.user.email}"></span></td>
                         <td scope="row"><span th:text="${order.orderDate}"></span></td>
                         <td scope="row"><span th:text="${order.orderStatus}"></span></td>
                         <td scope="row">---</td>
@@ -42,6 +44,7 @@
                         </td>
                     </tr>
                     <tr th:each="orderItem : ${order.orderItems}">
+                        <td scope="row"><i >---</i></td>
                         <td scope="row"><i >---</i></td>
                         <td scope="row"><i >---</i></td>
                         <td scope="row"><i >---</i></td>

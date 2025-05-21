@@ -107,14 +107,14 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public List<OrderDto> getUserOrders(Long userId) {
-        List<Order> orders = orderRepository.findByUserId(userId, Sort.by(Sort.Direction.ASC, "orderDate"));
+        List<Order> orders = orderRepository.findByUserId(userId);
         List<OrderDto> orderList = orders.stream().map(this::toOrderDto).collect(Collectors.toList());
         return orderList;
     }
 
     @Override
     public List<OrderDto> getOrders() {
-        List<Order> orders = orderRepository.findAll(Sort.by(Sort.Direction.ASC, "orderDate"));
+        List<Order> orders = orderRepository.findAll();
         List<OrderDto> orderList = orders.stream().map(this::toOrderDto).collect(Collectors.toList());
         return orderList;
     }

@@ -17,5 +17,5 @@ import org.springframework.data.repository.query.Param;
  */
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT * FROM orders WHERE user_id = :userId", nativeQuery = true)
-    List<Order> findByUserId(@Param("userId") Long userId, Sort sort);
+    List<Order> findByUserId(@Param("userId") Long userId);
 }
