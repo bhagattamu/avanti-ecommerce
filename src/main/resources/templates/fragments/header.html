@@ -16,15 +16,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Avanti</a>
+                    <a class="navbar-brand" href="/" >                        
+                        <img src="/images/logo.png" alt="Avanti Logo" width="50" height="40" class="d-inline-block align-text-top"/>
+                        <span class="navbar-brand mb-0 h1" style="vertical-align: sub">Avanti Gadgets</span>
+                    </a>
+
+
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                                <a class="nav-link active" href="/">Home</a>
                             </li>
                             <th:block th:if="${#ctx.session.loggedInUser != null}">
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="/orders">My Orders</a>
+                                    <a class="nav-link active" href="/orders">My Orders</a>
                                 </li>
                             </th:block>
                             <th:block th:if="${#ctx.session.role == 'ADMIN'}">

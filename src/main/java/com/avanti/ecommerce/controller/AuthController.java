@@ -45,7 +45,7 @@ public class AuthController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             System.out.println("Failed to register user. Message: " + e.getMessage());
-            return "redirect:/register";       
+            return "redirect:/register";
         }
     }
 
@@ -59,18 +59,23 @@ public class AuthController {
 
     @PostMapping("/loginUser")
     public String loginUser(@ModelAttribute LoginRequest loginRequest, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        try{
+        try {
+            System.out.println("com.avanti.ecommerce.controller.AuthController.loginUser()" + loginRequest.getRedirectURL());
             UserDto user = this.authService.login(loginRequest);
-        model.addAttribute("message", "Successfully logged in a user");
-        session.setAttribute("loggedInUser", user);
-        session.setAttribute("role", user.getRole().name());
-        return "redirect:/";
-        }catch(Exception e) {
+            model.addAttribute("message", "Successfully logged in a user");
+            session.setAttribute("loggedInUser", user);
+            session.setAttribute("role", user.getRole().name());
+            var redirectURL = (String) loginRequest.getRedirectURL();
+            if(redirectURL != null) {
+                return "redirect:/" + redirectURL;
+            }
+            return "redirect:/";
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             System.out.println("Failed to login user. Message: " + e.getMessage());
-            return "redirect:/login";   
+            return "redirect:/login";
         }
-        
+
     }
 
     @PostMapping("/logout")

@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-body">
                     <form method="post" th:action="@{/loginUser}"th:object="${loginRequest}">
-
+                        <input type="text" id="redirectURLInput" class="form-control" name="redirectURL" value="getURL()" hidden>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" class="form-control" name="email" th:field="*{email}" id="email" aria-describedby="emailHelp">
@@ -31,8 +31,17 @@
                 </div>
             </div>
             <script>
+                const redirectURLInput = document.getElementById("redirectURLInput");
+                redirectURLInput.value = getURL();
+                
                 function redirectToRegister() {
                     location.href = "/register";
+                }
+
+                function getURL() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const url = urlParams.get('url');
+                    return url;
                 }
             </script>
         </div>
