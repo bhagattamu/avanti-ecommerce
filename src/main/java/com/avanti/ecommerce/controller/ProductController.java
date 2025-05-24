@@ -113,6 +113,7 @@ public class ProductController {
             return "redirect:/login";
         }
         System.out.println("com.avanti.ecommerce.controller.ProductController.updateProduct(), PUT MAPPING");
+        ProductDto previousProduct = this.productService.getProductById(updateProductRequest.getId());
         try {
             if (!productImage.isEmpty()) {
                 String fileName = StringUtils.cleanPath(productImage.getOriginalFilename());
@@ -121,6 +122,7 @@ public class ProductController {
                 String uploadDir = "product-images/" + savedProduct.getId();
                 FileUploadUtil.saveFile(uploadDir, fileName, productImage);
             } else {
+                updateProductRequest.setProductImage(previousProduct.getProductImage());
                 this.productService.updateProduct(updateProductRequest);
             }
             System.out.println("Successfully saved a product");
