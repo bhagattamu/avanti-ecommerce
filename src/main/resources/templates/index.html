@@ -17,9 +17,9 @@
                         <div class="col mb-5" th:each="product : ${products}">
                             <div class="card h-100">
                                 <!--<a class="card-block stretched-link text-decoration-none" th:href="'/product/' + ${product.id}">-->
-                                    <!-- Product image-->
-                                    <img class="card-img-top" style="height: 100%; cursor: pointer" th:src="@{${product.productImagePath}}" th:alt="${product.name}"  th:onclick="redirectToProductDetailPage([[${product.id}]])"/>
-                                    <!-- Product details-->
+                                <!-- Product image-->
+                                <img class="card-img-top" style="height: 100%; cursor: pointer" th:src="@{${product.productImagePath}}" th:alt="${product.name}"  th:onclick="redirectToProductDetailPage([[${product.id}]])"/>
+                                <!-- Product details-->
                                 <!--</a>-->
                                 <div class="card-body p-4">
                                     <div class="text-center">
@@ -40,12 +40,37 @@
                     </div>
                 </div>
             </section>
+            <th:block th:if="${error}">
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto" th:text="Error"></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body" th:text="${error}">
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+            <th:block th:if="${message}">
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto" th:text="Success"></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body" th:text="${message}">
+                        </div>
+                    </div>
+                </div>
+            </th:block>
             <script>
                 function redirectToProductDetailPage(id) {
                     location.href = `/product/${id}`;
                 }
             </script>
         </div>
+
     </body>
 
 </html>

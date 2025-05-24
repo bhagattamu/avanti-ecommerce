@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -45,9 +46,9 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String manageProduct(HttpSession session, Model model) {
+    public String manageProduct(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         if (!isAdmin((String) session.getAttribute("role"))) {
-            model.addAttribute("message", "Forbiden! Admin login is requred");
+            redirectAttributes.addFlashAttribute("error", "Forbiden! Admin login is requred");
             System.out.println("Forbiden! Admin login is required");
             return "redirect:/";
         }
@@ -78,9 +79,9 @@ public class ProductController {
     }
 
     @PostMapping("/admin/product")
-    public String addProduct(@ModelAttribute AddProductRequest addProductRequest, @RequestParam("product") MultipartFile productImage, Model model, HttpSession session) {
+    public String addProduct(@ModelAttribute AddProductRequest addProductRequest, @RequestParam("product") MultipartFile productImage, RedirectAttributes redirectAttributes, HttpSession session) {
         if (!isAdmin((String) session.getAttribute("role"))) {
-            model.addAttribute("message", "Forbiden! Admin login is requred");
+            redirectAttributes.addFlashAttribute("error", "Forbiden! Admin login is requred");
             System.out.println("Forbiden! Admin login is required");
             return "redirect:/";
         }
@@ -95,9 +96,9 @@ public class ProductController {
                 this.productService.addProduct(addProductRequest);
             }
             System.out.println("Successfully saved a product");
-            model.addAttribute("message", "Successfully saved a product");
+            redirectAttributes.addFlashAttribute("success", "Successfully saved a product");
         } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             System.out.println("Failed to create a product. Message: " + e.getMessage());
         }
         return "redirect:/admin/product";
@@ -105,9 +106,9 @@ public class ProductController {
     }
 
     @PostMapping("/admin/product/update")
-    public String updateProduct(@RequestParam("product") MultipartFile productImage, @ModelAttribute UpdateProductRequest updateProductRequest, Model model, HttpSession session) {
+    public String updateProduct(@RequestParam("product") MultipartFile productImage, @ModelAttribute UpdateProductRequest updateProductRequest, RedirectAttributes redirectAttributes, HttpSession session) {
         if (!isAdmin((String) session.getAttribute("role"))) {
-            model.addAttribute("message", "Forbiden! Admin login is requred");
+            redirectAttributes.addFlashAttribute("error", "Forbiden! Admin login is requred");
             System.out.println("Forbiden! Admin login is required");
             return "redirect:/login";
         }
@@ -123,10 +124,10 @@ public class ProductController {
                 this.productService.updateProduct(updateProductRequest);
             }
             System.out.println("Successfully saved a product");
-            model.addAttribute("message", "Successfully saved a product");
+            redirectAttributes.addFlashAttribute("message", "Successfully saved a product");
 
         } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             System.out.println("Failed to create a product. Message: " + e.getMessage());
         }
         return "redirect:/admin/product";

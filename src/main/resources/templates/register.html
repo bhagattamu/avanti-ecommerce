@@ -25,6 +25,10 @@
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" name="password" th:field="*{password}" id="password">
                         </div>
+                        <div class="invalid-feedback" style="display: block;" >
+                            <span th:if="${error}" th:text="${error}"></span>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Register</button>
                     </form>
 

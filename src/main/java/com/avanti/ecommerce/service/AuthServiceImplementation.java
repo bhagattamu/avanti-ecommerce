@@ -46,6 +46,7 @@ public class AuthServiceImplementation implements AuthService {
             System.out.println("Successfull login!!");
         } else {
             System.out.println("Login failed");
+            throw new UserNotFoundException("User email or password is incorrect. Please try again");
         }
         return this.userService.toUserDto(user);
     }
